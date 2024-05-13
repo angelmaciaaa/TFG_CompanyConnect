@@ -16,9 +16,10 @@ Keeps account of the attendances of the employees on the basis of the
 actions(Check in/Check out) performed by them.
        """,
     'website': 'https://www.odoo.com/app/employees',
-    'depends': ['hr', 'barcodes'],
+    'depends': ['hr', 'barcodes', 'project'],
     'data': [
         'security/hr_attendance_security.xml',
+        'security/project_todo_security',
         'security/ir.model.access.csv',
         'views/hr_attendance_view.xml',
         'views/hr_attendance_overtime_view.xml',
@@ -26,6 +27,9 @@ actions(Check in/Check out) performed by them.
         'views/hr_employee_view.xml',
         'views/res_config_settings_views.xml',
         'views/hr_attendance_kiosk_templates.xml'
+        'views/project_task_views.xml',
+        'views/project_todo_menus.xml',
+        'wizard/mail_activity_todo_create.xml',
     ],
     'demo': [
         'data/hr_attendance_demo.xml'
@@ -34,7 +38,11 @@ actions(Check in/Check out) performed by them.
     'application': True,
     'assets': {
         'web.assets_backend': [
-            'hr_attendance/static/src/**/*',
+            'company_connect/static/src/**/*',
+            'company_connect/static/src/components/**/*',
+            'company_connect/static/src/scss/todo.scss',
+            'company_connect/static/src/views/**/*',
+            'company_connect/static/src/web/**/*',
         ],
         'web.qunit_suite_tests': [
             'hr_attendance/static/tests/hr_attendance_mock_server.js',

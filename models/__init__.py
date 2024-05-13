@@ -8,3 +8,5 @@ from . import hr_employee
 from . import hr_employee_public
 from . import res_company
 from . import res_users
+from . import mail_activity_type
+from . import project_task
