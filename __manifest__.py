@@ -3,8 +3,8 @@
 
 
 {
-    'name': 'Attendances',
-    'version': '2.0',
+    'name': 'CompanyConnect',
+    'version': '1.0',
     'category': 'Human Resources/Attendances',
     'sequence': 240,
     'summary': 'Track employee attendance',
