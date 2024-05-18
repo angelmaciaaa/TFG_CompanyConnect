@@ -20,11 +20,7 @@ actions(Check in/Check out) performed by them.
     'data': [
         'security/hr_attendance_security.xml',
         'security/ir.model.access.csv',
-        'views/hr_attendance_view.xml',
-        'views/hr_attendance_overtime_view.xml',
-        'views/hr_department_view.xml',
-        'views/hr_employee_view.xml',
-        'views/res_config_settings_views.xml',
+        'views/attendance_views.xml',
         'views/hr_attendance_kiosk_templates.xml'
     ],
     'demo': [

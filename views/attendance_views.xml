@@ -1,0 +1,621 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- views hr_attendance -->
+
+    <record id="view_attendance_tree" model="ir.ui.view">
+        <field name="name">hr.attendance.tree</field>
+        <field name="model">hr.attendance</field>
+        <field name="arch" type="xml">
+            <tree string="Employee attendances" decoration-success="color == 10" decoration-danger="color == 1" sample="1" duplicate="false">
+                <field name="employee_id" widget="many2one_avatar_user"/>
+                <field name="check_in"/>
+                <field name="check_out" options="{}"/>
+                <field name="worked_hours" string="Work Hours" widget="float_time"/>
+                <field name="overtime_hours" string="Over Time" optional="show" widget="float_time"/>
+                <field name="color" column_invisible="1"/>
+                <field name="in_latitude" optional="hidden"/>
+                <field name="in_longitude" optional="hidden"/>
+                <field name="out_latitude" optional="hidden"/>
+                <field name="out_longitude" optional="hidden"/>
+                <field name="in_country_name" optional="hidden"/>
+                <field name="out_country_name" optional="hidden"/>
+                <field name="in_mode" optional="hidden"/>
+                <field name="out_mode" optional="hidden"/>
+                <field name="in_city" optional="hidden"/>
+                <field name="out_city" optional="hidden"/>
+                <field name="create_uid" optional="hidden"/>
+                <field name="write_uid" optional="hidden"/>
+                <field name="write_date" optional="hidden"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_hr_attendance_kanban" model="ir.ui.view">
+        <field name="name">hr.attendance.kanban</field>
+        <field name="model">hr.attendance</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" sample="1">
+                <field name="employee_id"/>
+                <field name="check_in"/>
+                <field name="check_out"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="o_kanban_record_title">
+                                <field name="employee_id" widget="many2one_avatar_user" options="{'display_avatar_name': True}" class="fs-5 fw-bold"/>
+                            </div>
+                            <hr class="mt4 mb8"/>
+                            <div class="o_kanban_record_subtitle">
+                                <i class="fa fa-calendar" aria-label="Period" role="img" title="Period"></i>
+                                <t t-esc="record.check_in.value"/>
+                                - <t t-esc="record.check_out.value"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="hr_attendance_view_form" model="ir.ui.view">
+        <field name="name">hr.attendance.form</field>
+        <field name="model">hr.attendance</field>
+        <field name="arch" type="xml">
+            <form string="Employee attendances" duplicate="false">
+                <sheet>
+                    <group>
+                        <group colspan="2">
+                            <group col="1">
+                                <field name="employee_id" widget="many2one_avatar_user"/>
+                                <field name="check_in" options="{'rounding': 0}"/>
+                                <field name="check_out" options="{'rounding': 0}"/>
+                            </group>
+                            <group col="2">
+                                <field name="worked_hours" widget="float_time"/>
+                                <field name="overtime_hours" widget="float_time" string="Extra Hours"/>
+                            </group>
+                        </group>
+                        <separator string="Check In"/>
+                        <group colspan="2">
+                            <group>
+                                <group>
+                                    <field name="in_mode"/>
+                                    <field name="in_ip_address" invisible="in_mode == 'manual'"/>
+                                    <field name="in_browser" invisible="in_mode == 'manual'"/>
+                                </group>
+                            </group>
+                            <group invisible="in_mode == 'manual'">
+                                <label for="in_country_name" string="Localisation"/>
+                                <div class="o_row" name="in_location_info">
+                                    <span>
+                                        <field name="in_country_name"/>
+                                    </span>
+                                    <span>
+                                        <field name="in_city" invisible="in_city == 'Unknown'" nolabel="1"/>
+                                    </span>
+                                </div>
+
+                                <label for="in_latitude" string="GPS Coordinates"/>
+                                <div>
+                                    <div class="o_row">
+                                        <span>
+                                            <field name="in_latitude"/>
+                                        </span>,
+                                        <span>
+                                            <field name="in_longitude" nolabel="1"/>
+                                        </span>
+                                    </div>
+                                    <button
+                                        name="action_in_attendance_maps"
+                                        type="object"
+                                        class="btn btn-link ps-0 pt-0 pb-2"
+                                        icon="oi-arrow-right"
+                                        string="View on Maps"
+                                        colspan="2"/>
+                                </div>
+                            </group>
+                        </group>
+                        <separator string="Check Out" invisible="not check_out"/>
+                        <group colspan="2" invisible="not check_out">
+                            <group>
+                                <group>
+                                    <field name="out_mode" string="Mode"/>
+                                    <field name="out_ip_address" string="IP Address" invisible="in_mode == 'manual'"/>
+                                    <field name="out_browser" string="Browser" invisible="in_mode == 'manual'"/>
+                                </group>
+                            </group>
+                            <group invisible="out_mode == 'manual'">
+                                <label for="out_country_name" string="Localisation"/>
+                                <div class="o_row" name="out_location_info" >
+                                    <span>
+                                        <field name="out_country_name"/>
+                                    </span>
+                                    <span>
+                                        <field name="out_city" invisible="out_city == 'Unknown'" nolabel="1"/>
+                                    </span>
+                                </div>
+
+                                <label for="out_latitude" string="GPS Coordinates"/>
+                                <div>
+                                    <div class="o_row">
+                                        <span>
+                                            <field name="out_latitude"/>
+                                        </span>,
+                                        <span>
+                                            <field name="out_longitude" nolabel="1"/>
+                                        </span>
+                                    </div>
+                                    <button
+                                        name="action_out_attendance_maps"
+                                        type="object"
+                                        class="btn btn-link ps-0 pt-0 pb-2"
+                                        icon="oi-arrow-right"
+                                        string="View on Maps"
+                                        colspan="2"/>
+                                </div>
+                            </group>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_attendance_view_graph" model="ir.ui.view">
+        <field name="name">hr.attendance.graph</field>
+        <field name="model">hr.attendance</field>
+        <field name="arch" type="xml">
+            <graph string="Worked Hours" type="line" stacked="0" sample="1">
+                <field name="employee_id" type="row"/>
+                <field name="check_in" interval="week" type="col"/>
+                <field name="worked_hours" type="measure" widget="float_time"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="hr_attendance_view_pivot" model="ir.ui.view">
+        <field name="name">hr.attendance.pivot</field>
+        <field name="model">hr.attendance</field>
+        <field name="arch" type="xml">
+            <pivot string="Worked Hours">
+                <field name="employee_id" type="row"/>
+                <field name="check_in" type="col" interval="month"/>
+                <field name="worked_hours" type="measure" widget="float_time"/>
+                <field name="overtime_hours" type="measure" widget="float_time"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="hr_attendance_view_filter" model="ir.ui.view">
+        <field name="name">hr_attendance_view_filter</field>
+        <field name="model">hr.attendance</field>
+        <field name="arch" type="xml">
+            <search string="Hr Attendance Search">
+                <field name="employee_id"/>
+                <field name="department_id" operator="child_of"/>
+                <field name="check_in"/>
+                <filter string="My Attendances" name="myattendances" domain="[('employee_id.user_id', '=', uid)]" />
+                <filter string="My Team" name="myteam" domain="[('employee_id.parent_id.user_id', '=', uid)]"/>
+                <separator/>
+                <filter string="At Work" name="nocheckout" domain="[('check_out', '=', False)]" />
+                <filter string="Errors" name="errors"
+                        domain="['|', ('worked_hours', '&gt;=', 16), '&amp;', ('check_out', '=', False), ('check_in', '&lt;=',  (context_today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]"                />
+                <separator/>
+                <filter string="Check In" name="check_in_filter" date="check_in"/>
+                <filter string="Last 7 days" name="last_week" domain="[(
+                    'check_in','&gt;=', (
+                        context_today() + datetime.timedelta(days=-7)
+                        )
+                    )]"/>
+                <filter string="Last 3 Months" invisible="1" name="last_three_months" domain="[(
+                    'check_in','&gt;=', (
+                        context_today() + datetime.timedelta(days=-90)
+                        )
+                    )]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Check In" name="groupby_name" context="{'group_by': 'check_in:week'}"/>
+                    <filter string="Employee" name="employee" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Check Out" name="groupby_check_out" context="{'group_by': 'check_out'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- views hr_department -->
+
+    <record id="hr_department_view_kanban" model="ir.ui.view">
+        <field name="name">hr.department.kanban.inherit</field>
+        <field name="model">hr.department</field>
+        <field name="inherit_id" ref="hr.hr_department_view_kanban"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//div[hasclass('o_kanban_manage_reports')]" position="inside">
+                    <a role="menuitem" class="dropdown-item" name="%(hr_attendance_reporting)d" type="action" groups="hr_attendance.group_hr_attendance_officer">
+                        Attendances
+                    </a>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+
+    <!-- views hr_employee -->
+
+    <record id="view_employee_form_inherit_hr_attendance" model="ir.ui.view">
+        <field name="name">hr.employee</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="priority">110</field>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <field name="attendance_state" invisible="1"/>
+                <field name="hours_last_month" groups="hr_attendance.group_hr_attendance_officer" invisible="1"/>
+                <button name="action_open_last_month_attendances"
+                        class="oe_stat_button"
+                        icon="fa-clock-o"
+                        type="object"
+                        groups="hr_attendance.group_hr_attendance_officer"
+                        invisible="hours_last_month == 0"
+                        help="Worked hours this month">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="hours_last_month_display" widget="float_time"/> Hours
+                        </span>
+                        <span class="o_stat_text">
+                            This Month
+                        </span>
+                    </div>
+                </button>
+                <button name="action_open_last_month_overtime"
+                        class="oe_stat_button"
+                        icon="fa-history"
+                        type="object"
+                        invisible="total_overtime == 0.0"
+                        groups="hr_attendance.group_hr_attendance_officer">
+                    <div class="o_stat_info">
+                        <span class="o_stat_value text-success" invisible="total_overtime &lt; 0">
+                            <field name="total_overtime" widget="float_time"/>
+                        </span>
+                        <span class="o_stat_value text-danger" invisible="total_overtime &gt;= 0">
+                            <field name="total_overtime" widget="float_time"/>
+                        </span>
+                        <span class="o_stat_text">Extra Hours</span>
+                    </div>
+                </button>
+            </xpath>
+            <xpath expr="//group[@name='managers']" position="inside">
+                <field name="attendance_manager_id" string="Attendance" widget="many2one_avatar_user"/>
+            </xpath>
+            <xpath expr="//group[@name='managers']" position="attributes">
+                <attribute name="invisible">0</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_user_view_form" model="ir.ui.view">
+        <field name="name">hr.user.preferences.view.form.attendance.inherit</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="hr.res_users_view_form_profile"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <field name="employee_ids" invisible="1"/>
+                <button name="action_open_last_month_attendances"
+                        class="oe_stat_button"
+                        icon="fa-calendar"
+                        type="object"
+                        groups="base.group_user"
+                        help="Worked hours this month">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="hours_last_month_display" widget="float_time"/> Hours
+                        </span>
+                        <span class="o_stat_text">
+                            This Month
+                        </span>
+                    </div>
+                </button>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <field name="display_extra_hours" invisible="1"/>
+                <button name="action_open_last_month_overtime"
+                        class="oe_stat_button"
+                        icon="fa-history"
+                        type="object"
+                        invisible="total_overtime == 0.0 or not display_extra_hours"
+                        groups="base.group_user"
+                        help="Amount of extra hours">
+                    <div class="o_stat_info">
+                        <span class="o_stat_value text-success" invisible="total_overtime &lt; 0">
+                            <field name="total_overtime" widget="float_time"/>
+                        </span>
+                        <span class="o_stat_value text-danger" invisible="total_overtime &gt;= 0">
+                            <field name="total_overtime" widget="float_time"/>
+                        </span>
+                        <span class="o_stat_text">Extra Hours</span>
+                    </div>
+                </button>
+            </xpath>
+            <xpath expr="//group[@name='managers']" position="inside">
+                <field name="attendance_manager_id" string="Attendance" widget="many2one_avatar_user"/>
+            </xpath>
+            <xpath expr="//group[@name='managers']" position="attributes">
+                <attribute name="invisible">0</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- employee kanban view specifically for hr_attendance (to check in/out) -->
+    <record id="hr_employees_view_kanban" model="ir.ui.view">
+        <field name="name">hr.employee.kanban</field>
+        <field name="model">hr.employee</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <kanban create="false" action="action_employee_kiosk_confirm" type="object">
+                <field name="attendance_state"/>
+                <field name="hours_today"/>
+                <field name="total_overtime"/>
+                <field name="id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                    <div class="oe_kanban_global_click">
+                        <div class="o_kanban_image">
+                            <img t-att-src="kanban_image('hr.employee.public', 'avatar_128', record.id.raw_value)" alt="Employee"/>
+                        </div>
+                        <div class="oe_kanban_details">
+                            <div id="textbox">
+                                <div class="float-end" t-if="record.attendance_state.raw_value == 'checked_in'">
+                                    <span id="oe_hr_attendance_status" class="fa fa-circle text-success me-1" role="img" aria-label="Available" title="Available"></span>
+                                </div>
+                                <div class="float-end" t-if="record.attendance_state.raw_value == 'checked_out'">
+                                    <span id="oe_hr_attendance_status" class="fa fa-circle text-warning me-1"
+                                          role="img" aria-label="Not available" title="Not available">
+                                    </span>
+                                </div>
+                                <strong>
+                                    <field name="name"/>
+                                </strong>
+                            </div>
+                            <ul>
+                                <li t-if="record.job_id.raw_value"><field name="job_id"/></li>
+                                <li t-if="record.work_location_id.raw_value"><field name="work_location_id"/></li>
+                            </ul>
+                        </div>
+                    </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="hr_employee_attendance_action_kanban" model="ir.actions.act_window">
+        <field name="name">Employees</field>
+        <field name="res_model">hr.employee.public</field>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="hr_employees_view_kanban"/>
+        <field name="target">fullscreen</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new employee
+            </p><p>
+                Add a few employees to be able to select an employee here and perform his check in / check out.
+                To create employees go to the Employees menu.
+            </p>
+        </field>
+    </record>
+
+    <record id="view_employee_tree_inherit_leave" model="ir.ui.view">
+        <field name="name">hr.employee.tree.leave</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='work_location_id']" position="after">
+                <field name="attendance_manager_id" optional="hide" string="Attendance" widget="many2one_avatar_user"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_attendance_employee_simple_tree_view" model="ir.ui.view">
+        <field name="name">hr.attendance.tree</field>
+        <field name="model">hr.attendance</field>
+        <field name="arch" type="xml">
+            <tree sample="1">
+                <field name="check_in"/>
+                <field name="check_out"/>
+                <field name="worked_hours" string="Work Hours" widget="float_time"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- views hr_attendance_overtime -->
+
+    <record id="view_attendance_overtime_tree" model="ir.ui.view">
+        <field name="name">hr.attendance.overtime.tree</field>
+        <field name="model">hr.attendance.overtime</field>
+        <field name="arch" type="xml">
+            <tree edit="0" create="0">
+                <field name="date"/>
+                <field name="employee_id"/>
+                <field name="duration" widget="float_time"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_attendance_overtime_search" model="ir.ui.view">
+        <field name="name">hr.attendance.overtime.search</field>
+        <field name="model">hr.attendance.overtime</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <field name="duration" filter_domain="[('duration', '>=', self)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="hr_attendance_overtime_action" model="ir.actions.act_window">
+        <field name="name">Extra Hours</field>
+        <field name="res_model">hr.attendance.overtime</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <!-- views res_config_settings_views -->
+
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.hr.attendance</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="80"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Attendances" string="Attendances" name="hr_attendance" groups="hr_attendance.group_hr_attendance_manager">
+                    <block title="Modes" name="kiosk_mode_setting_container">
+                        <setting string="Kiosk Mode" company_dependent="1" help="Define the way the user will be identified by the application.">
+                            <field name="attendance_kiosk_mode" required="1" class="w-75"/>
+                        </setting>
+                        <setting string="Attendances from Backend" company_dependent="1" help="Allow Users to Check in/out from Odoo.">
+                            <field name="attendance_from_systray" required="1"/>
+                        </setting>
+                    </block>
+                    <block title="Kiosk Settings">
+                        <setting invisible="attendance_kiosk_mode == 'manual'" company_dependent="1" help="Define the camera used for the barcode scan.">
+                            <field name="attendance_barcode_source" required="1"/>
+                        </setting>
+                        <setting string="Display Time" company_dependent="1" help="Choose how long the greeting message will be displayed.">
+                            <field name="attendance_kiosk_delay" required="1" class="text-center" style="width: 10%; min-width: 4rem;"/><span> seconds</span>
+                        </setting>
+                        <setting title="Set PIN codes in the employee detail form (in HR Settings tab)." invisible="attendance_kiosk_mode == 'barcode'" help="Use PIN codes (defined on the Employee's profile) to check-in.">
+                            <field name="attendance_kiosk_use_pin"/>
+                        </setting>
+                        <setting title="Kiosk Mode Adress" help="Use this url to access your kiosk mode from any device. Warning, anybody with the link can access your kiosk.">
+                            <field name="attendance_kiosk_url" class="o_hr_kiosk_url_media w-100" style="width:100% !important;" widget="CopyClipboardURL"/>
+                            <br/>
+                            <span>
+                                If your address is compromised, you can refresh it to generate a new one.
+                            </span>
+                            <br/>
+                            <button name="regenerate_kiosk_key" type="object" string="Generate a new Kiosk Mode URL" class="btn-link" icon="fa-refresh"/>
+                        </setting>
+                    </block>
+                    <block title="Extra Hours" name="overtime_settings">
+                        <setting title="Activate the count of employees' extra hours." string="Count of Extra Hours" company_dependent="1" help="Compare attendance with working hours set on employee.">
+                            <field name="hr_attendance_overtime"/>
+                            <div class="mt16" invisible="not hr_attendance_overtime" required="hr_attendance_overtime">
+                                <div class="mt16 row" title="Count of extra hours is considered from this date. Potential extra hours prior to this date are not considered.">
+                                    <label for="overtime_start_date" string="Start from" class="o_light_label col-lg-3"/>
+                                    <field name="overtime_start_date" class="col-lg-3 w-75" required="hr_attendance_overtime" />
+                                </div>
+                                <br/>
+                                <label for="overtime_company_threshold" class="o_form_label">
+                                    Tolerance Time In Favor Of Company
+                                </label>
+                                <div class="text-muted">
+                                    Allow a period of time (around working hours) where extra time will not be counted, in benefit of the company
+                                </div>
+                                <span>Time Period </span><field name="overtime_company_threshold" class="text-center"
+                                    required="hr_attendance_overtime" style="width: 10%; min-width: 4rem;"/><span> Minutes</span>
+                                <br/>
+                                <br/>
+                                <label for="overtime_employee_threshold" class="o_form_label">
+                                    Tolerance Time In Favor Of Employee
+                                </label>
+                                <div class="text-muted">
+                                    Allow a period of time (around working hours) where extra time will not be deducted, in benefit of the employee
+                                </div>
+                                <span>Time Period </span><field name="overtime_employee_threshold" class="text-center"
+                                    required="hr_attendance_overtime" style="width: 10%; min-width: 4rem;"/><span> Minutes</span>
+                            </div>
+                        </setting>
+                        <setting title="Display Extra Hours." string="Display Extra Hours" invisible="not hr_attendance_overtime" company_dependent="1" help="Display Extra Hours in Kiosk mode and on User profile.">
+                            <field name="hr_attendance_display_overtime"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_hr_attendance_settings" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'hr_attendance', 'bin_size': False}</field>
+    </record>
+
+    <!-- actions -->
+
+    <record id="hr_attendance_action" model="ir.actions.act_window">
+        <field name="name">Attendances</field>
+        <field name="res_model">hr.attendance</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">
+            {
+                "search_default_employee": 1
+            }
+        </field>
+        <field name="search_view_id" ref="hr_attendance_view_filter"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No attendance records found
+            </p><p>
+                The attendance records of your employees will be displayed here.
+            </p>
+        </field>
+    </record>
+
+    <record id="hr_attendance_reporting" model="ir.actions.act_window">
+        <field name="name">Attendances</field>
+        <field name="res_model">hr.attendance</field>
+        <field name="view_mode">graph,pivot</field>
+        <field name="search_view_id" ref="hr_attendance_view_filter"/>
+        <field name="context">
+            {
+                "search_default_groupby_name" : 1,
+                "search_default_employee": 1,
+                "search_default_last_three_months": 1
+            }
+        </field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No attendance records found
+            </p><p>
+                The attendance reporting of your employees will be displayed here.
+            </p>
+        </field>
+    </record>
+
+    <record id="hr_attendance_action_greeting_message" model="ir.actions.client">
+        <field name="name">Message</field>
+        <field name="tag">hr_attendance_greeting_message</field>
+    </record>
+
+    <record model="ir.actions.server" id="open_kiosk_url">
+        <field name="name">Open Kiosk Url</field>
+        <field name="model_id" ref="hr_attendance.model_res_company"/>
+        <field name="binding_model_id" ref="hr_attendance.model_res_company"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = model._action_open_kiosk_mode()
+        </field>
+        <field name="groups_id" eval="[(4, ref('hr_attendance.group_hr_attendance_manager'))]"/>
+    </record>
+
+    <!-- Menus -->
+
+    <menuitem id="menu_hr_attendance_root" name="CompanyConnect" sequence="205" groups="hr_attendance.group_hr_attendance_officer" web_icon="hr_attendance,static/description/icon.png"/>
+
+    <menuitem id="menu_hr_attendance_kiosk_no_user_mode" name="Kiosk Mode" parent="menu_hr_attendance_root" sequence="10" groups="hr_attendance.group_hr_attendance_manager" action="open_kiosk_url"/>
+
+    <menuitem id="menu_hr_attendance_reporting" name="Reporting" parent="menu_hr_attendance_root" sequence="15" groups="hr_attendance.group_hr_attendance_officer" action="hr_attendance_reporting"/>
+
+    <menuitem id="menu_hr_attendance_view_attendances" name="Overview" parent="menu_hr_attendance_root" sequence="5" groups="hr_attendance.group_hr_attendance_officer" action="hr_attendance_action"/>
+
+    <!-- Menu res_config_settings -->
+
+    <menuitem id="hr_attendance.menu_hr_attendance_settings" name="Configuration" parent="menu_hr_attendance_root"
+        sequence="99" action="action_hr_attendance_settings" groups="hr_attendance.group_hr_attendance_manager"/>
+
+</odoo>
