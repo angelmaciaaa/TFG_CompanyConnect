@@ -16,27 +16,27 @@ Keeps account of the attendances of the employees on the basis of the
 actions(Check in/Check out) performed by them.
        """,
     'website': 'https://www.odoo.com/app/employees',
-    'depends': ['hr', 'barcodes'],
+    'depends': ['hr', 'barcodes', 'project'],
     'data': [
         'security/hr_attendance_security.xml',
+        'security/project_todo_security.xml',
         'security/ir.model.access.csv',
         'views/attendance_views.xml',
-        'views/hr_attendance_kiosk_templates.xml'
-    ],
-    'demo': [
-        'data/hr_attendance_demo.xml'
+        'views/hr_attendance_kiosk_templates.xml',
+        'views/todo_views.xml',
+        'views/todo_wizards_views.xml'
     ],
     'installable': True,
     'application': True,
     'assets': {
         'web.assets_backend': [
-            'hr_attendance/static/src/**/*',
+            'company_connect/static/src/**/*',
         ],
         'web.qunit_suite_tests': [
-            'hr_attendance/static/tests/hr_attendance_mock_server.js',
+            'company_connect/static/tests/hr_attendance_mock_server.js',
         ],
         'web.qunit_mobile_suite_tests': [
-            'hr_attendance/static/tests/hr_attendance_mock_server.js',
+            'company_connect/static/tests/hr_attendance_mock_server.js',
         ],
         'hr_attendance.assets_public_attendance': [
             # Front-end libraries
@@ -55,9 +55,9 @@ actions(Check in/Check out) performed by them.
             ('include', 'web._assets_core'),
 
             # Public Kiosk app and its components
-            "hr_attendance/static/src/public_kiosk/**/*",
-            "hr_attendance/static/src/hr_attendance.scss",
-            'hr_attendance/static/src/components/**/*',
+            "company_connect/static/src/public_kiosk/**/*",
+            "company_connect/static/src/hr_attendance.scss",
+            'company_connect/static/src/components/**/*',
             "web/static/src/views/fields/formatters.js",
 
             # Barcode reader utils
