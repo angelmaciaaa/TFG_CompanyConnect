@@ -31,6 +31,14 @@ actions(Check in/Check out) performed by them.
     'assets': {
         'web.assets_backend': [
             'company_connect/static/src/**/*',
+            'company_connect/static/src/components/attendance_menu/**/*',
+            'company_connect/static/src/components/card_layout/**/*',
+            'company_connect/static/src/components/manual_selection/**/*',
+            'company_connect/static/src/components/greetings/**/*',
+            'company_connect/static/src/components/pin_code/**/*',
+            'company_connect/static/src/components/kiosk_barcode/**/*',
+            'company_connect/static/src/components/todo_done_checkmark/**/*',
+            'company_connect/static/src/components/todo_editable_breadcrumb_name/**/*',
         ],
         'web.qunit_suite_tests': [
             'company_connect/static/tests/hr_attendance_mock_server.js',
@@ -38,7 +46,7 @@ actions(Check in/Check out) performed by them.
         'web.qunit_mobile_suite_tests': [
             'company_connect/static/tests/hr_attendance_mock_server.js',
         ],
-        'hr_attendance.assets_public_attendance': [
+        'company_connect.assets_public_attendance': [
             # Front-end libraries
             ('include', 'web._assets_helpers'),
             ('include', 'web._assets_frontend_helpers'),
@@ -56,7 +64,7 @@ actions(Check in/Check out) performed by them.
 
             # Public Kiosk app and its components
             "company_connect/static/src/public_kiosk/**/*",
-            "company_connect/static/src/hr_attendance.scss",
+            "company_connect/static/src/scss/hr_attendance.scss",
             'company_connect/static/src/components/**/*',
             "web/static/src/views/fields/formatters.js",
 
