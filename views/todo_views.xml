@@ -308,7 +308,7 @@
     <!-- To-do Menu -->
     <menuitem
         id="menu_todo_todos"
-        name="To-do"
+        name="CompanyConnectToDo"
         action="project_todo.project_task_preload_action_todo"
         web_icon="company_connect,static/description/icon2.png">
     </menuitem>

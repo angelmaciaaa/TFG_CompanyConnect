@@ -11,4 +11,4 @@ export const todoFormView = {
     Controller: TodoFormController,
 };
 
-registry.category("views").add("todo_form", todoFormView);
+registry.category("views").add("company_connect_form", todoFormView);

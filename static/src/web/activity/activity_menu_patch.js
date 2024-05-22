@@ -9,7 +9,7 @@ import { patch } from "@web/core/utils/patch";
 import { registry } from "@web/core/registry";
 
 // Add a to-do category for the command palette
-registry.category("command_categories").add("to-do", {}, { sequence: 105 });
+registry.category("command_categories").add("company_connect", {}, { sequence: 105 });
 
 patch(ActivityMenu.prototype, {
     setup() {

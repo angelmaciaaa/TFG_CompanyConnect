@@ -9,4 +9,4 @@ export const todoActivityWizardView = {
     Controller: TodoActivityWizardController,
 };
 
-registry.category("views").add("todo_activity_wizard", todoActivityWizardView);
+registry.category("views").add("company_connect_activity_wizard", todoActivityWizardView);

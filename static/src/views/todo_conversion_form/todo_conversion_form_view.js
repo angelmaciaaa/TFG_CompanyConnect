@@ -9,4 +9,4 @@ export const todoConversionFormView = {
     Controller: TodoConversionFormController,
 };
 
-registry.category("views").add("todo_conversion_form", todoConversionFormView);
+registry.category("views").add("company_connect_conversion_form", todoConversionFormView);

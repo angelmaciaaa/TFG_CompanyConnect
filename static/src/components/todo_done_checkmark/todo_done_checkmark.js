@@ -72,4 +72,4 @@ export const todoDoneCheckmark = {
     },
 }
 
-registry.category("fields").add("todo_done_checkmark", todoDoneCheckmark);
+registry.category("fields").add("company_connect_done_checkmark", todoDoneCheckmark);

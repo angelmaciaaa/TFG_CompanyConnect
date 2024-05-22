@@ -9,4 +9,4 @@ export const todoListView = {
     Controller: TodoListController,
 };
 
-registry.category("views").add("todo_list", todoListView);
+registry.category("views").add("company_connect_list", todoListView);
