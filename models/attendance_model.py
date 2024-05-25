@@ -399,7 +399,7 @@ class HrAttendance(models.Model):
     def write(self, vals):
         if vals.get('employee_id') and \
             vals['employee_id'] not in self.env.user.employee_ids.ids and \
-            not self.env.user.has_group('hr_attendance.group_hr_attendance_officer'):
+            not self.env.user.has_group('company_connect.group_company_connect_hr_attendance_officer'):
             raise AccessError(_("Do not have access, user cannot edit the attendances that are not his own."))
         attendances_dates = self._get_attendances_dates()
         result = super(HrAttendance, self).write(vals)
@@ -497,19 +497,19 @@ class HrEmployeePublic(models.Model):
 
     # These are required for manual attendance
     attendance_state = fields.Selection(related='employee_id.attendance_state', readonly=True,
-        groups="hr_attendance.group_hr_attendance_officer")
+        groups="company_connect.group_company_connect_hr_attendance_officer")
     hours_today = fields.Float(related='employee_id.hours_today', readonly=True,
-        groups="hr_attendance.group_hr_attendance_officer")
+        groups="company_connect.group_company_connect_hr_attendance_officer")
     last_attendance_id = fields.Many2one(related='employee_id.last_attendance_id', readonly=True,
-        groups="hr_attendance.group_hr_attendance_officer")
+        groups="company_connect.group_company_connect_hr_attendance_officer")
     total_overtime = fields.Float(related='employee_id.total_overtime', readonly=True,
-        groups="hr_attendance.group_hr_attendance_officer")
+        groups="company_connect.group_company_connect_hr_attendance_officer")
     attendance_manager_id = fields.Many2one(related='employee_id.attendance_manager_id',
-        groups="hr_attendance.group_hr_attendance_officer")
+        groups="company_connect.group_company_connect_hr_attendance_officer")
     last_check_in = fields.Datetime(related='employee_id.last_check_in',
-        groups="hr_attendance.group_hr_attendance_officer")
+        groups="company_connect.group_company_connect_hr_attendance_officer")
     last_check_out = fields.Datetime(related='employee_id.last_check_out',
-        groups="hr_attendance.group_hr_attendance_officer")
+        groups="company_connect.group_company_connect_hr_attendance_officer")
     
 class HrEmployee(models.Model):
     _inherit = "hr.employee"
@@ -517,44 +517,44 @@ class HrEmployee(models.Model):
     attendance_manager_id = fields.Many2one(
         'res.users', store=True, readonly=False,
         domain="[('share', '=', False), ('company_ids', 'in', company_id)]",
-        groups="hr_attendance.group_hr_attendance_manager",
+        groups="company_connect.group_company_connect_hr_attendance_manager",
         help="The user set in Attendance will access the attendance of the employee through the dedicated app and will be able to edit them.")
     attendance_ids = fields.One2many(
-        'hr.attendance', 'employee_id', groups="hr_attendance.group_hr_attendance_officer,hr.group_hr_user")
+        'hr.attendance', 'employee_id', groups="company_connect.group_company_connect_hr_attendance_officer,hr.group_hr_user")
     last_attendance_id = fields.Many2one(
         'hr.attendance', compute='_compute_last_attendance_id', store=True,
-        groups="hr_attendance.group_hr_attendance_officer,hr.group_hr_user")
+        groups="company_connect.group_company_connect_hr_attendance_officer,hr.group_hr_user")
     last_check_in = fields.Datetime(
         related='last_attendance_id.check_in', store=True,
-        groups="hr_attendance.group_hr_attendance_officer,hr.group_hr_user", tracking=False)
+        groups="company_connect.group_company_connect_hr_attendance_officer,hr.group_hr_user", tracking=False)
     last_check_out = fields.Datetime(
         related='last_attendance_id.check_out', store=True,
-        groups="hr_attendance.group_hr_attendance_officer,hr.group_hr_user", tracking=False)
+        groups="company_connect.group_company_connect_hr_attendance_officer,hr.group_hr_user", tracking=False)
     attendance_state = fields.Selection(
         string="Attendance Status", compute='_compute_attendance_state',
         selection=[('checked_out', "Checked out"), ('checked_in', "Checked in")],
-        groups="hr_attendance.group_hr_attendance_officer,hr.group_hr_user")
+        groups="company_connect.group_company_connect_hr_attendance_officer,hr.group_hr_user")
     hours_last_month = fields.Float(
-        compute='_compute_hours_last_month', groups="hr_attendance.group_hr_attendance_officer,hr.group_hr_user")
+        compute='_compute_hours_last_month', groups="company_connect.group_company_connect_hr_attendance_officer,hr.group_hr_user")
     hours_today = fields.Float(
         compute='_compute_hours_today',
-        groups="hr_attendance.group_hr_attendance_officer,hr.group_hr_user")
+        groups="company_connect.group_company_connect_hr_attendance_officer,hr.group_hr_user")
     hours_previously_today = fields.Float(
         compute='_compute_hours_today',
-        groups="hr_attendance.group_hr_attendance_officer,hr.group_hr_user")
+        groups="company_connect.group_company_connect_hr_attendance_officer,hr.group_hr_user")
     last_attendance_worked_hours = fields.Float(
         compute='_compute_hours_today',
-        groups="hr_attendance.group_hr_attendance_officer,hr.group_hr_user")
+        groups="company_connect.group_company_connect_hr_attendance_officer,hr.group_hr_user")
     hours_last_month_display = fields.Char(
         compute='_compute_hours_last_month')
     overtime_ids = fields.One2many(
-        'hr.attendance.overtime', 'employee_id', groups="hr_attendance.group_hr_attendance_officer,hr.group_hr_user")
+        'hr.attendance.overtime', 'employee_id', groups="company_connect.group_company_connect_hr_attendance_officer,hr.group_hr_user")
     total_overtime = fields.Float(
         compute='_compute_total_overtime', compute_sudo=True)
 
     @api.model_create_multi
     def create(self, vals_list):
-        officer_group = self.env.ref('hr_attendance.group_hr_attendance_officer', raise_if_not_found=False)
+        officer_group = self.env.ref('company_connect.group_company_connect_hr_attendance_officer', raise_if_not_found=False)
         group_updates = []
         for vals in vals_list:
             if officer_group and vals.get('attendance_manager_id'):
@@ -570,8 +570,8 @@ class HrEmployee(models.Model):
             # Officer was added
             if values['attendance_manager_id']:
                 officer = self.env['res.users'].browse(values['attendance_manager_id'])
-                officers_group = self.env.ref('hr_attendance.group_hr_attendance_officer', raise_if_not_found=False)
-                if officers_group and not officer.has_group('hr_attendance.group_hr_attendance_officer'):
+                officers_group = self.env.ref('company_connect.group_company_connect_hr_attendance_officer', raise_if_not_found=False)
+                if officers_group and not officer.has_group('company_connect.group_company_connect_hr_attendance_officer'):
                     officer.sudo().write({'groups_id': [(4, officers_group.id)]})
 
         res = super(HrEmployee, self).write(values)
@@ -740,7 +740,7 @@ class ResCompany(models.Model):
         ('back', 'Back Camera'),
     ], string='Barcode Source', default='front')
     attendance_kiosk_delay = fields.Integer(default=10)
-    attendance_kiosk_key = fields.Char(default=lambda s: uuid.uuid4().hex, copy=False, groups='hr_attendance.group_hr_attendance_manager')
+    attendance_kiosk_key = fields.Char(default=lambda s: uuid.uuid4().hex, copy=False, groups='company_connect.group_company_connect_hr_attendance_manager')
     attendance_kiosk_url = fields.Char(compute="_compute_attendance_kiosk_url")
     attendance_kiosk_use_pin = fields.Boolean(string='Employee PIN Identification')
     attendance_from_systray = fields.Boolean(string='Attendance From Systray', default=True)
@@ -880,7 +880,7 @@ class ResConfigSettings(models.TransientModel):
             company.write({field: self[field] for field in fields_to_check})
 
     def regenerate_kiosk_key(self):
-        if self.user_has_groups("hr_attendance.group_hr_attendance_manager"):
+        if self.user_has_groups("company_connect.group_company_connect_hr_attendance_manager"):
             self.company_id._regenerate_attendance_kiosk_key()
 
 class User(models.Model):
@@ -913,7 +913,7 @@ class User(models.Model):
             [('attendance_manager_id', 'in', self.ids)]).attendance_manager_id
         officers_to_remove_ids = self - attendance_officers
         if officers_to_remove_ids:
-            self.env.ref('hr_attendance.group_hr_attendance_officer').users = [(3, user.id) for user in
+            self.env.ref('company_connect.group_company_connect_hr_attendance_officer').users = [(3, user.id) for user in
                                                                                officers_to_remove_ids]
     def action_open_last_month_attendances(self):
         self.ensure_one()

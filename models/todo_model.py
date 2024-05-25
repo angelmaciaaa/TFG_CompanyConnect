@@ -21,15 +21,15 @@ class Task(models.Model):
         return super().create(vals_list)
 
     def _ensure_onboarding_todo(self):
-        if not self.env.user.has_group('project_todo.group_onboarding_todo'):
+        if not self.env.user.has_group('company_connect.group_onboarding_company_connect_todo'):
             self._generate_onboarding_todo(self.env.user)
-            onboarding_group = self.env.ref('project_todo.group_onboarding_todo').sudo()
+            onboarding_group = self.env.ref('company_connect.group_onboarding_company_connect_todo').sudo()
             onboarding_group.write({'users': [Command.link(self.env.user.id)]})
 
     def _generate_onboarding_todo(self, user):
         user.ensure_one()
         body = self.with_context(lang=user.lang or self.env.user.lang).env['ir.qweb']._render(
-            'project_todo.todo_user_onboarding',
+            'company_connect.company_connect_todo_user_onboarding',
             {'object': user},
             minimal_qcontext=True,
             raise_if_not_found=False
