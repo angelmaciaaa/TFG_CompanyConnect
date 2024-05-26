@@ -24,7 +24,9 @@ actions(Check in/Check out) performed by them.
         'views/attendance_views.xml',
         'views/hr_attendance_kiosk_templates.xml',
         'views/todo_views.xml',
-        'views/todo_wizards_views.xml'
+        'views/todo_wizards_views.xml',
+        'data/mail_activity_type_data.xml',
+        'data/todo_template.xml'
     ],
     'installable': True,
     'application': True,
