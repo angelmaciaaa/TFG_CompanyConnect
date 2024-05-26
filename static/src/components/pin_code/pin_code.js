@@ -70,4 +70,4 @@ KioskPinCode.props = {
     onPinConfirm: {type: Function}
 }
 
-KioskPinCode.template = "hr_attendance.KioskPinConfirm";
+KioskPinCode.template = "company_connect.KioskPinConfirm";

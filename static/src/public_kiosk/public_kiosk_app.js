@@ -1,17 +1,17 @@
 /** @odoo-module **/
 
 import {App, whenReady, Component, useState} from "@odoo/owl";
-import { CardLayout } from "@hr_attendance/components/card_layout/card_layout";
-import { KioskManualSelection } from "@hr_attendance/components/manual_selection/manual_selection";
+import { CardLayout } from "@company_connect/components/card_layout/card_layout";
+import { KioskManualSelection } from "@company_connect/components/manual_selection/manual_selection";
 import { makeEnv, startServices } from "@web/env";
 import { templates } from "@web/core/assets";
 import { _t } from "@web/core/l10n/translation";
 import { MainComponentsContainer } from "@web/core/main_components_container";
 import { useService, useBus } from "@web/core/utils/hooks";
 import { url } from "@web/core/utils/urls";
-import {KioskGreetings} from "@hr_attendance/components/greetings/greetings";
-import {KioskPinCode} from "@hr_attendance/components/pin_code/pin_code";
-import {KioskBarcodeScanner} from "@hr_attendance/components/kiosk_barcode/kiosk_barcode";
+import {KioskGreetings} from "@company_connect/components/greetings/greetings";
+import {KioskPinCode} from "@company_connect/components/pin_code/pin_code";
+import {KioskBarcodeScanner} from "@company_connect/components/kiosk_barcode/kiosk_barcode";
 
 class kioskAttendanceApp extends Component{
     static props = [];
@@ -116,7 +116,7 @@ class kioskAttendanceApp extends Component{
     }
 }
 
-kioskAttendanceApp.template = "hr_attendance.public_kiosk_app";
+kioskAttendanceApp.template = "company_connect.public_kiosk_app";
 
 export async function createPublicKioskAttendance(document, kiosk_backend_info) {
     await whenReady();

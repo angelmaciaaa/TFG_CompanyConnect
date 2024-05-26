@@ -25,7 +25,7 @@ export class KioskGreetings extends Component {
     }
 }
 
-KioskGreetings.template = "hr_attendance.public_kiosk_greetings";
+KioskGreetings.template = "company_connect.public_kiosk_greetings";
 KioskGreetings.props = {
     employeeData : {type: Object},
     kioskReturn: {type: Function}

@@ -55,7 +55,7 @@ export class TodoDoneCheckmark extends StateSelectionField {
     }
 }
 
-TodoDoneCheckmark.template = 'project_todo.TodoDoneCheckmark';
+TodoDoneCheckmark.template = 'company_connect.TodoDoneCheckmark';
 
 TodoDoneCheckmark.props = {
     ...stateSelectionField.component.props,

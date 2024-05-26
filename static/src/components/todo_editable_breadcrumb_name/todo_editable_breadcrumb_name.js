@@ -54,4 +54,4 @@ export class TodoEditableBreadcrumbName extends CharField {
     }
 }
 
-TodoEditableBreadcrumbName.template = 'project_todo.TodoEditableBreadcrumbName';
+TodoEditableBreadcrumbName.template = 'company_connect.TodoEditableBreadcrumbName';

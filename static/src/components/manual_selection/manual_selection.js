@@ -30,7 +30,7 @@ export class KioskManualSelection extends Component {
     }
 }
 
-KioskManualSelection.template = "hr_attendance.public_kiosk_manual_selection";
+KioskManualSelection.template = "company_connect.public_kiosk_manual_selection";
 KioskManualSelection.components = {
     Dropdown,
     DropdownItem

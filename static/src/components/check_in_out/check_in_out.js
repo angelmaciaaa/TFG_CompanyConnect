@@ -41,7 +41,7 @@ export class CheckInOut extends Component {
     }
 }
 
-CheckInOut.template = "hr_attendance.CheckInOut";
+CheckInOut.template = "company_connect.CheckInOut";
 CheckInOut.props = {
     checkedIn: Boolean,
     employeeId: Number,

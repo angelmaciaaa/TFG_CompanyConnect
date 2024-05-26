@@ -14,7 +14,7 @@ const { DateTime } = luxon;
 export class ActivityMenu extends Component {
     static components = {Dropdown, DropdownItem};
     static props = [];
-    static template = "hr_attendance.attendance_menu";
+    static template = "company_connect.attendance_menu";
 
     setup() {
         this.rpc = useService("rpc");
