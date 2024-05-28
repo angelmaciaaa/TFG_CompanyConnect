@@ -15,6 +15,7 @@ This module aims to manage employee's attendances.
 Keeps account of the attendances of the employees on the basis of the
 actions(Check in/Check out) performed by them.
        """,
+    'author': 'Angel Macia',
     'website': 'https://www.odoo.com/app/employees',
     'depends': ['project', 'hr', 'barcodes'],
     'data': [
@@ -22,11 +23,11 @@ actions(Check in/Check out) performed by them.
         'security/project_todo_security.xml',
         'security/ir.model.access.csv',
         'views/attendance_views.xml',
-        'views/hr_attendance_kiosk_templates.xml',
         'views/todo_views.xml',
         'views/todo_wizards_views.xml',
         'data/mail_activity_type_data.xml',
-        'data/todo_template.xml'
+        'data/todo_template.xml',
+        'views/company_connect_templates.xml'
     ],
     'installable': True,
     'application': True,
@@ -65,7 +66,7 @@ actions(Check in/Check out) performed by them.
             ('include', 'web._assets_core'),
 
             # Public Kiosk app and its components
-            "company_connect/static/src/public_kiosk/**/*",
+            "company_connect/static/src/public_kiosk/**/*"
             "company_connect/static/src/scss/hr_attendance.scss",
             'company_connect/static/src/components/**/*',
             "web/static/src/views/fields/formatters.js",

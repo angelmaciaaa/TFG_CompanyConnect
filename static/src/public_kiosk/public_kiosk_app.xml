@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
 
-<t t-name="hr_attendance.companyHeader">
+<t t-name="company_connect.companyHeader">
     <h2 class="mb-2"><small>Welcome to</small></h2>
     <img t-att-src="companyImageUrl" alt="Company Logo" class="o_hr_attendance_kiosk_company_image align-self-center img img-fluid mb-3" width="200"/>
 </t>
@@ -10,7 +10,7 @@
     <MainComponentsContainer/>
     <CardLayout>
         <t t-if="this.state.active_display === 'main'">
-            <t t-call="hr_attendance.companyHeader">
+            <t t-call="company_connect.companyHeader">
                 <t t-set="companyImageUrl" t-value="companyImageUrl"/>
                 <t t-set="companyName" t-value="this.props.companyName"/>
             </t>
@@ -29,7 +29,7 @@
             </t>
         </t>
         <t t-if="this.state.active_display === 'manual'">
-            <t t-call="hr_attendance.companyHeader">
+            <t t-call="company_connect.companyHeader">
                 <t t-set="companyImageUrl" t-value="companyImageUrl"/>
                 <t t-set="companyName" t-value="this.props.companyName"/>
             </t>

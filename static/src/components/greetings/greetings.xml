@@ -2,7 +2,7 @@
 <templates xml:space="preserve">
     <t t-name="company_connect.public_kiosk_greetings">
         <t t-if="this.attendance">
-            <t t-call="hr_attendance.EmployeeBadge">
+            <t t-call="company_connect.EmployeeBadge">
                 <t t-set="employeeAvatar" t-value="this.employeeAvatar"/>
             </t>
             <div t-if="attendance.check_out" class="flex-grow-1">

@@ -33,7 +33,7 @@ export class ActivityMenu extends Component {
     }
 
     async searchReadEmployee(){
-        const result = await this.rpc("/hr_attendance/attendance_user_data");
+        const result = await this.rpc("/company_connect/attendance_user_data");
         this.employee = result;
         if (this.employee.id) {
             this.hoursToday = this.date_formatter(
@@ -57,14 +57,14 @@ export class ActivityMenu extends Component {
         if (!isIosApp()) {
             navigator.geolocation.getCurrentPosition(
                 async ({coords: {latitude, longitude}}) => {
-                    await this.rpc("/hr_attendance/systray_check_in_out", {
+                    await this.rpc("/company_connect/systray_check_in_out", {
                         latitude,
                         longitude
                     })
                     await this.searchReadEmployee()
                 },
                 async err => {
-                    await this.rpc("/hr_attendance/systray_check_in_out")
+                    await this.rpc("/company_connect/systray_check_in_out")
                     await this.searchReadEmployee()
                 },
                 {
@@ -72,7 +72,7 @@ export class ActivityMenu extends Component {
                 }
             )
         } else {
-            await this.rpc("/hr_attendance/systray_check_in_out")
+            await this.rpc("/company_connect/systray_check_in_out")
             await this.searchReadEmployee()
         }
     }

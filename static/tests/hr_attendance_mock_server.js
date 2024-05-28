@@ -9,7 +9,7 @@ patch(MockServer.prototype, {
      * @override
      */
     async _performRPC(route, args) {
-        if (route === "/hr_attendance/attendance_user_data") {
+        if (route === "/company_connect/attendance_user_data") {
             return Promise.resolve({
                 "id": 1,
                 "employee_name": "Mitchell Admin",

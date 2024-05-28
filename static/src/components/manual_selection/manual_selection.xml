@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
-    <t t-name="hr_attendance.employeeListElement">
+    <t t-name="company_connect.employeeListElement">
         <div class="d-flex position-relative py-2 overflow-visible o_treeEntry">
     <div class="o_media_left position-relative">
         <div class="o_media_object d-block rounded border border-info">

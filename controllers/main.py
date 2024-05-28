@@ -50,10 +50,10 @@ class HrAttendance(http.Controller):
             'mode': mode
         }
 
-    @http.route('/hr_attendance/kiosk_mode_menu', auth='user', type='http')
+    @http.route('/company_connect/kiosk_mode_menu', auth='user', type='http')
     def kiosk_menu_item_action(self):
         # better use route with company_id suffix
-        if request.env.user.user_has_groups("hr_attendance.group_hr_attendance_manager"):
+        if request.env.user.user_has_groups("company_connect.group_company_connect_hr_attendance_manager"):
             # Auto log out will prevent users from forgetting to log out of their session
             # before leaving the kiosk mode open to the public. This is a prevention security
             # measure.
@@ -62,17 +62,17 @@ class HrAttendance(http.Controller):
         else:
             return request.not_found()
 
-    @http.route('/hr_attendance/kiosk_mode_menu/<int:company_id>', auth='user', type='http')
+    @http.route('/company_connect/kiosk_mode_menu/<int:company_id>', auth='user', type='http')
     def kiosk_menu_item_action2(self, company_id):
         request.update_context(allowed_company_ids=[company_id])
         return self.kiosk_menu_item_action()
 
-    @http.route('/hr_attendance/kiosk_keepalive', auth='user', type='json')
+    @http.route('/company_connect/kiosk_keepalive', auth='user', type='json')
     def kiosk_keepalive(self):
         request.session.touch()
         return {}
 
-    @http.route(["/hr_attendance/<token>"], type='http', auth='public', website=True, sitemap=True)
+    @http.route(["/company_connect/<token>"], type='http', auth='public', website=True, sitemap=True)
     def open_kiosk_mode(self, token):
         company = self._get_company(token)
         if not company:
@@ -100,7 +100,7 @@ class HrAttendance(http.Controller):
                                                                                                       "total_employee"])]
             request.session.logout(keep_db=True)
             return request.render(
-                'hr_attendance.public_kiosk_mode',
+                'company_connect.public_kiosk_mode',
                 {
                     'kiosk_backend_info': {
                         'token': token,
@@ -114,7 +114,7 @@ class HrAttendance(http.Controller):
                 }
             )
 
-    @http.route('/hr_attendance/attendance_employee_data', type="json", auth="public")
+    @http.route('/company_connect/attendance_employee_data', type="json", auth="public")
     def employee_attendance_data(self, token, employee_id):
         company = self._get_company(token)
         if company:
@@ -123,7 +123,7 @@ class HrAttendance(http.Controller):
                 return self._get_employee_info_response(employee)
         return {}
 
-    @http.route('/hr_attendance/attendance_barcode_scanned', type="json", auth="public")
+    @http.route('/company_connect/attendance_barcode_scanned', type="json", auth="public")
     def scan_barcode(self, token, barcode):
         company = self._get_company(token)
         if company:
@@ -133,7 +133,7 @@ class HrAttendance(http.Controller):
                 return self._get_employee_info_response(employee)
         return {}
 
-    @http.route('/hr_attendance/manual_selection', type="json", auth="public")
+    @http.route('/company_connect/manual_selection', type="json", auth="public")
     def manual_selection(self, token, employee_id, pin_code):
         company = self._get_company(token)
         if company:
@@ -143,7 +143,7 @@ class HrAttendance(http.Controller):
                 return self._get_employee_info_response(employee)
         return {}
 
-    @http.route('/hr_attendance/systray_check_in_out', type="json", auth="user")
+    @http.route('/company_connect/systray_check_in_out', type="json", auth="user")
     def systray_attendance(self, latitude=False, longitude=False):
         employee = request.env.user.employee_id
         geo_ip_response = self._get_geoip_response(mode='systray',
@@ -152,7 +152,7 @@ class HrAttendance(http.Controller):
         employee._attendance_action_change(geo_ip_response)
         return self._get_employee_info_response(employee)
 
-    @http.route('/hr_attendance/attendance_user_data', type="json", auth="user")
+    @http.route('/company_connect/attendance_user_data', type="json", auth="user")
     def user_attendance_data(self):
         employee = request.env.user.employee_id
         return self._get_employee_info_response(employee)

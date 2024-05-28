@@ -749,7 +749,7 @@ class ResCompany(models.Model):
     @api.depends("attendance_kiosk_key")
     def _compute_attendance_kiosk_url(self):
         for company in self:
-            company.attendance_kiosk_url = url_join(company.get_base_url(), '/hr_attendance/%s' % company.attendance_kiosk_key)
+            company.attendance_kiosk_url = url_join(company.get_base_url(), '/company_connect/%s' % company.attendance_kiosk_key)
 
     # ---------------------------------------------------------
     # ORM Overrides
@@ -832,7 +832,7 @@ class ResCompany(models.Model):
         return {
             'type': 'ir.actions.act_url',
             'target': 'self',
-            'url': f'/hr_attendance/kiosk_mode_menu/{self.env.company.id}',
+            'url': f'/company_connect/kiosk_mode_menu/{self.env.company.id}',
         }
     
 class ResConfigSettings(models.TransientModel):

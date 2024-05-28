@@ -225,6 +225,29 @@
         </field>
     </record>
 
+    <!-- action hr_attendance_reporting -->
+
+    <record id="hr_attendance_reporting" model="ir.actions.act_window">
+        <field name="name">Attendances</field>
+        <field name="res_model">hr.attendance</field>
+        <field name="view_mode">graph,pivot</field>
+        <field name="search_view_id" ref="hr_attendance_view_filter"/>
+        <field name="context">
+            {
+                "search_default_groupby_name" : 1,
+                "search_default_employee": 1,
+                "search_default_last_three_months": 1
+            }
+        </field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No attendance records found
+            </p><p>
+                The attendance reporting of your employees will be displayed here.
+            </p>
+        </field>
+    </record>
+
     <!-- views hr_department -->
 
     <record id="hr_department_view_kanban" model="ir.ui.view">
@@ -234,7 +257,7 @@
         <field name="arch" type="xml">
             <data>
                 <xpath expr="//div[hasclass('o_kanban_manage_reports')]" position="inside">
-                    <a role="menuitem" class="dropdown-item" name="%(hr_attendance_reporting)d" type="action" groups="hr_attendance.group_hr_attendance_officer">
+                    <a role="menuitem" class="dropdown-item" name="%(hr_attendance_reporting)d" type="action" groups="company_connect.group_company_connect_hr_attendance_officer">
                         Attendances
                     </a>
                 </xpath>
@@ -566,56 +589,35 @@
         </field>
     </record>
 
-    <record id="hr_attendance_reporting" model="ir.actions.act_window">
-        <field name="name">Attendances</field>
-        <field name="res_model">hr.attendance</field>
-        <field name="view_mode">graph,pivot</field>
-        <field name="search_view_id" ref="hr_attendance_view_filter"/>
-        <field name="context">
-            {
-                "search_default_groupby_name" : 1,
-                "search_default_employee": 1,
-                "search_default_last_three_months": 1
-            }
-        </field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_empty_folder">
-                No attendance records found
-            </p><p>
-                The attendance reporting of your employees will be displayed here.
-            </p>
-        </field>
-    </record>
-
     <record id="hr_attendance_action_greeting_message" model="ir.actions.client">
         <field name="name">Message</field>
         <field name="tag">hr_attendance_greeting_message</field>
     </record>
 
     <record model="ir.actions.server" id="open_kiosk_url">
-        <field name="name">Open Kiosk Url</field>
-        <field name="model_id" ref="hr_attendance.model_res_company"/>
-        <field name="binding_model_id" ref="hr_attendance.model_res_company"/>
+        <field name="name">Open Kiosk Url Company_Connect</field>
+        <field name="model_id" ref="company_connect.model_res_company"/>
+        <field name="binding_model_id" ref="company_connect.model_res_company"/>
         <field name="state">code</field>
         <field name="code">
             action = model._action_open_kiosk_mode()
         </field>
-        <field name="groups_id" eval="[(4, ref('hr_attendance.group_hr_attendance_manager'))]"/>
+        <field name="groups_id" eval="[(4, ref('company_connect.group_company_connect_hr_attendance_manager'))]"/>
     </record>
 
     <!-- Menus -->
 
-    <menuitem id="menu_hr_attendance_root" name="CompanyConnect" sequence="205" groups="hr_attendance.group_hr_attendance_officer" web_icon="hr_attendance,static/description/icon.png"/>
+    <menuitem id="menu_hr_attendance_root" name="CompanyConnect" sequence="205" groups="company_connect.group_company_connect_hr_attendance_officer" web_icon="company_connect,static/description/icon.png"/>
 
-    <menuitem id="menu_hr_attendance_kiosk_no_user_mode" name="Kiosk Mode" parent="menu_hr_attendance_root" sequence="10" groups="hr_attendance.group_hr_attendance_manager" action="open_kiosk_url"/>
+    <menuitem id="menu_hr_attendance_kiosk_no_user_mode" name="Kiosk Mode" parent="menu_hr_attendance_root" sequence="10" groups="company_connect.group_company_connect_hr_attendance_manager" action="open_kiosk_url"/>
 
-    <menuitem id="menu_hr_attendance_reporting" name="Reporting" parent="menu_hr_attendance_root" sequence="15" groups="hr_attendance.group_hr_attendance_officer" action="hr_attendance_reporting"/>
+    <menuitem id="menu_hr_attendance_reporting" name="Reporting" parent="menu_hr_attendance_root" sequence="15" groups="company_connect.group_company_connect_hr_attendance_officer" action="hr_attendance_reporting"/>
 
-    <menuitem id="menu_hr_attendance_view_attendances" name="Overview" parent="menu_hr_attendance_root" sequence="5" groups="hr_attendance.group_hr_attendance_officer" action="hr_attendance_action"/>
+    <menuitem id="menu_hr_attendance_view_attendances" name="Overview" parent="menu_hr_attendance_root" sequence="5" groups="company_connect.group_company_connect_hr_attendance_officer" action="hr_attendance_action"/>
 
     <!-- Menu res_config_settings -->
 
-    <menuitem id="hr_attendance.menu_hr_attendance_settings" name="Configuration" parent="menu_hr_attendance_root"
-        sequence="99" action="action_hr_attendance_settings" groups="hr_attendance.group_hr_attendance_manager"/>
+    <!-- <menuitem id="hr_attendance.menu_hr_attendance_settings" name="Configuration" parent="menu_hr_attendance_root"
+        sequence="99" action="action_hr_attendance_settings" groups="company_connect.group_company_connect_hr_attendance_manager"/> -->
 
 </odoo>
