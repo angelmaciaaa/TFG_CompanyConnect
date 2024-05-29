@@ -276,12 +276,12 @@
         <field name="arch" type="xml">
             <xpath expr="//div[@name='button_box']" position="inside">
                 <field name="attendance_state" invisible="1"/>
-                <field name="hours_last_month" groups="hr_attendance.group_hr_attendance_officer" invisible="1"/>
+                <field name="hours_last_month" groups="company_connect.group_company_connect_hr_attendance_officer" invisible="1"/>
                 <button name="action_open_last_month_attendances"
                         class="oe_stat_button"
                         icon="fa-clock-o"
                         type="object"
-                        groups="hr_attendance.group_hr_attendance_officer"
+                        groups="company_connect.group_company_connect_hr_attendance_officer"
                         invisible="hours_last_month == 0"
                         help="Worked hours this month">
                     <div class="o_field_widget o_stat_info">
@@ -298,7 +298,7 @@
                         icon="fa-history"
                         type="object"
                         invisible="total_overtime == 0.0"
-                        groups="hr_attendance.group_hr_attendance_officer">
+                        groups="company_connect.group_company_connect_hr_attendance_officer">
                     <div class="o_stat_info">
                         <span class="o_stat_value text-success" invisible="total_overtime &lt; 0">
                             <field name="total_overtime" widget="float_time"/>
@@ -493,7 +493,7 @@
         <field name="inherit_id" ref="base.res_config_settings_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//form" position="inside">
-                <app data-string="Attendances" string="Attendances" name="hr_attendance" groups="hr_attendance.group_hr_attendance_manager">
+                <app data-string="Attendances" string="Company_Connect" name="hr_attendance" groups="company_connect.group_company_connect_hr_attendance_manager">
                     <block title="Modes" name="kiosk_mode_setting_container">
                         <setting string="Kiosk Mode" company_dependent="1" help="Define the way the user will be identified by the application.">
                             <field name="attendance_kiosk_mode" required="1" class="w-75"/>
