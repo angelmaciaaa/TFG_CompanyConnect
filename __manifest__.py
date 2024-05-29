@@ -22,11 +22,11 @@ actions(Check in/Check out) performed by them.
         'security/hr_attendance_security.xml',
         'security/project_todo_security.xml',
         'security/ir.model.access.csv',
+        'data/mail_activity_type_data.xml',
+        'data/todo_template.xml',
         'views/attendance_views.xml',
         'views/todo_views.xml',
         'views/todo_wizards_views.xml',
-        'data/mail_activity_type_data.xml',
-        'data/todo_template.xml',
         'views/company_connect_templates.xml'
     ],
     'installable': True,

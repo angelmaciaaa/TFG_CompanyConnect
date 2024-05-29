@@ -2,8 +2,8 @@
 
 import { _t } from "@web/core/l10n/translation";
 import { FormController } from "@web/views/form/form_controller";
-import { TodoEditableBreadcrumbName } from "@project_todo/components/todo_editable_breadcrumb_name/todo_editable_breadcrumb_name";
-import { TodoDoneCheckmark } from "@project_todo/components/todo_done_checkmark/todo_done_checkmark";
+import { TodoEditableBreadcrumbName } from "@company_connect/components/todo_editable_breadcrumb_name/todo_editable_breadcrumb_name";
+import { TodoDoneCheckmark } from "@company_connect/components/todo_done_checkmark/todo_done_checkmark";
 
 import { onWillStart } from "@odoo/owl";
 
@@ -13,7 +13,7 @@ import { onWillStart } from "@odoo/owl";
  */
 
 export class TodoFormController extends FormController {
-    static template = "project_todo.TodoFormView";
+    static template = "company_connect.TodoFormView";
 
     setup() {
         super.setup();
@@ -33,7 +33,7 @@ export class TodoFormController extends FormController {
                 description: _t("Convert to Task"),
                 callback: () => {
                     this.model.action.doAction(
-                        "project_todo.project_task_action_convert_todo_to_task",
+                        "company_connect.project_task_action_convert_todo_to_task",
                         {
                             props: {
                                 resId: this.model.root.resId,

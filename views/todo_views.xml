@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- Todo Kanban view -->
+    <!-- Todo Kanban view TOMA NOTA QUE EN LA LÍNEA 13 HAY ALGO RARUNO, SE HACE REFERENCIA A UNA VISTA QUE SE CREA EN LA LÍNEA 130 Y ALGO-->
     <record id="project_task_view_todo_kanban" model="ir.ui.view">
         <field name="name">project.task.kanban</field>
         <field name="model">project.task</field>
@@ -10,7 +10,7 @@
             <kanban default_group_by="personal_stage_type_id"
                     class="o_kanban_small_column"
                     on_create="quick_create"
-                    quick_create_view="project_todo.project_task_view_todo_quick_create_form"
+                    quick_create_view="company_connect.project_task_view_todo_quick_create_form"
                     sample="1"
                     js_class="project_task_kanban"
                     default_order="state, priority desc, date_deadline asc, sequence, id desc">
@@ -156,7 +156,7 @@
         <field name="priority">999</field>
         <field name="arch" type="xml">
             <form string="Convert to Task"
-                  js_class="todo_conversion_form">
+                  js_class="company_connect_conversion_form">
                 <sheet>
                     <group>
                         <!-- company_id field is used in the domain filtering project_id in
@@ -246,7 +246,7 @@
         <field name="domain">[('user_ids', 'in', [uid]), ('project_id', '=', False), ('parent_id', '=', False)]</field>
         <field name="view_mode">kanban,form,tree,activity</field>
         <field name="search_view_id" ref="project_task_view_todo_search"/>
-        <field name="context">{'search_default_open_tasks': 1, 'tree_view_ref': 'project_todo.project_task_view_todo_tree'}</field>
+        <field name="context">{'search_default_open_tasks': 1, 'tree_view_ref': 'company_connect.project_task_view_todo_tree'}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 No to-do found. Let's create one!
@@ -287,7 +287,7 @@
         <field name="model_id" ref="project.model_project_task"/>
         <field name="state">code</field>
         <field name="code">
-            model._ensure_onboarding_todo(); action = env["ir.actions.actions"]._for_xml_id("project_todo.project_task_action_todo")
+            model._ensure_onboarding_todo(); action = env["ir.actions.actions"]._for_xml_id("company_connect.project_task_action_todo")
         </field>
     </record>
 
@@ -309,7 +309,7 @@
     <menuitem
         id="menu_todo_todos"
         name="CompanyConnectToDo"
-        action="project_todo.project_task_preload_action_todo"
+        action="company_connect.project_task_preload_action_todo"
         web_icon="company_connect,static/description/icon2.png">
     </menuitem>
 
