@@ -66,9 +66,18 @@ actions(Check in/Check out) performed by them.
             ('include', 'web._assets_core'),
 
             # Public Kiosk app and its components
-            "company_connect/static/src/public_kiosk/**/*"
+            "company_connect/static/src/public_kiosk/**/*",
             "company_connect/static/src/scss/hr_attendance.scss",
-            'company_connect/static/src/components/**/*',
+            #'company_connect/static/src/components/**/*', 
+            #2024-05-29 17:51:05,240 18132 WARNING TFG-CompanyConnect odoo.addons.web.controllers.binary: Parsing asset bundle company_connect.assets_public_attendance.min.js 
+            #has failed: Cannot create 'company_connect.TodoEditableBreadcrumbName' because the template to inherit 'web.CharField' is not found. 
+            'company_connect/static/src/components/attendance_menu/**/*',
+            'company_connect/static/src/components/card_layout/**/*',
+            'company_connect/static/src/components/manual_selection/**/*',
+            'company_connect/static/src/components/greetings/**/*',
+            'company_connect/static/src/components/pin_code/**/*',
+            'company_connect/static/src/components/kiosk_barcode/**/*',
+            'company_connect/static/src/components/check_in_out/**/*',
             "web/static/src/views/fields/formatters.js",
 
             # Barcode reader utils
