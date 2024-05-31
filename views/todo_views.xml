@@ -306,11 +306,11 @@
     </record>
 
     <!-- To-do Menu -->
-    <menuitem
+    <!--<menuitem
         id="menu_todo_todos"
         name="CompanyConnectToDo"
         action="company_connect.project_task_preload_action_todo"
         web_icon="company_connect,static/description/icon2.png">
-    </menuitem>
+    </menuitem> -->
 
 </odoo>

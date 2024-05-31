@@ -605,7 +605,7 @@
         <field name="groups_id" eval="[(4, ref('company_connect.group_company_connect_hr_attendance_manager'))]"/>
     </record>
 
-    <!-- Menus -->
+    <!-- Menus 
 
     <menuitem id="menu_hr_attendance_root" name="CompanyConnect" sequence="205" groups="company_connect.group_company_connect_hr_attendance_officer" web_icon="company_connect,static/description/icon.png"/>
 
@@ -614,7 +614,7 @@
     <menuitem id="menu_hr_attendance_reporting" name="Reporting" parent="menu_hr_attendance_root" sequence="15" groups="company_connect.group_company_connect_hr_attendance_officer" action="hr_attendance_reporting"/>
 
     <menuitem id="menu_hr_attendance_view_attendances" name="Overview" parent="menu_hr_attendance_root" sequence="5" groups="company_connect.group_company_connect_hr_attendance_officer" action="hr_attendance_action"/>
-
+-->
     <!-- Menu res_config_settings -->
 
     <!-- <menuitem id="hr_attendance.menu_hr_attendance_settings" name="Configuration" parent="menu_hr_attendance_root"

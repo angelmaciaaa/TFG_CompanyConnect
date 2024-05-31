@@ -26,6 +26,7 @@ actions(Check in/Check out) performed by them.
         'data/todo_template.xml',
         'views/attendance_views.xml',
         'views/todo_views.xml',
+        'views/company_connect_menus.xml',
         'views/todo_wizards_views.xml',
         'views/company_connect_templates.xml'
     ],
@@ -42,6 +43,9 @@ actions(Check in/Check out) performed by them.
             'company_connect/static/src/components/kiosk_barcode/**/*',
             'company_connect/static/src/components/todo_done_checkmark/**/*',
             'company_connect/static/src/components/todo_editable_breadcrumb_name/**/*',
+            'company_connect/static/src/scss/todo.scss',
+            'company_connect/static/src/views/**/*',
+            'company_connect/static/src/web/**/*',
         ],
         'web.qunit_suite_tests': [
             'company_connect/static/tests/hr_attendance_mock_server.js',
