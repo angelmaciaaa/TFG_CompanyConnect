@@ -7,6 +7,10 @@ from odoo.tools import html2plaintext
 class Task(models.Model):
     _inherit = 'project.task'
 
+    timer_start = fields.Datetime(string='Timer Start')
+    timer_pause = fields.Datetime(string='Timer Pause')
+    time_spent = fields.Float(string='Time Spent', compute='_calculate_time', store=True)
+
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
@@ -52,6 +56,18 @@ class Task(models.Model):
             'res_id': self.id,
             'type': 'ir.actions.act_window',
         }
+    
+    def _start(self):
+        self.timer_start = datetime.now()
+    
+    def _pause(self):
+        if self.timer_start: self.timer_pause = datetime.now()
+
+    def _stop(self):
+        if self.timer_start:
+            self.time_spent += (datetime.now() - self.timer_start).total_seconds() / 3600.0
+        self.timer_start = False
+        self.timer_pause = False
 
 class MailActivityType(models.Model):
     _inherit = "mail.activity.type"
