@@ -69,6 +69,31 @@ class Task(models.Model):
         self.timer_start = False
         self.timer_pause = False
 
+    @api.depends('timer_start', 'timer_pause', 'stage_id')
+    def _calculate_time(self):
+        for task in self:
+            if task.timer_start and task.stage_id.name in ['In progress', 'Changes Requested', 'Waiting']:
+                if task.timer_pause:
+                    task.time_spent += (task.timer_pause - task.timer_start).total_seconds() / 3600.0
+                else:
+                    task.time_spent += (datetime.now() - task.timer_start).total_seconds() / 3600.0
+
+            task.timer_start = False
+            task.timer_pause = False
+
+    def write(self, vals):
+        res = super(Task, self).write(vals)
+        for task in self:
+            if 'stage_id' in vals:
+                stage = self.env['project.task.type'].browse(vals['stage_id'])
+                if stage.name == 'In progress':
+                    task._start()
+                elif stage.name in ['Changes Requested', 'Waiting']:
+                    task._pause()
+                elif stage.name in ['Cancelled', 'Done']:
+                    task._stop()
+        return res
+
 class MailActivityType(models.Model):
     _inherit = "mail.activity.type"
 
