@@ -3,13 +3,14 @@
 
 from odoo import api, models, _, _lt, Command, fields
 from odoo.tools import html2plaintext
+from datetime import datetime
 
 class Task(models.Model):
     _inherit = 'project.task'
 
     timer_start = fields.Datetime(string='Timer Start')
-    timer_pause = fields.Datetime(string='Timer Pause')
     time_spent = fields.Float(string='Time Spent', compute='_calculate_time', store=True)
+    timer = fields.Boolean("Timer Running", default=False)
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -58,41 +59,45 @@ class Task(models.Model):
         }
     
     def _start(self):
-        self.timer_start = datetime.now()
-    
-    def _pause(self):
-        if self.timer_start: self.timer_pause = datetime.now()
+        self.ensure_one()
+        if not self.timer:
+            self.timer_start = datetime.now()
+            self.timer = True
+
+    def action_start(self):
+        self._start()
 
     def _stop(self):
-        if self.timer_start:
-            self.time_spent += (datetime.now() - self.timer_start).total_seconds() / 3600.0
+        self.ensure_one()
+        if self.timer:
+            delta = datetime.now() - fields.Datetime.from_string(self.timer_start)
+            self.time_spent += delta.total_seconds() / 3600
+            self.timer = False
         self.timer_start = False
-        self.timer_pause = False
+        
+    def action_stop(self):
+        self._stop()
 
-    @api.depends('timer_start', 'timer_pause', 'stage_id')
+    @api.depends('timer_start', 'timer')
     def _calculate_time(self):
         for task in self:
-            if task.timer_start and task.stage_id.name in ['In progress', 'Changes Requested', 'Waiting']:
-                if task.timer_pause:
-                    task.time_spent += (task.timer_pause - task.timer_start).total_seconds() / 3600.0
-                else:
-                    task.time_spent += (datetime.now() - task.timer_start).total_seconds() / 3600.0
-
-            task.timer_start = False
-            task.timer_pause = False
+            if task.timer and task.timer_start:
+                delta = datetime.now() - fields.Datetime.from_string(task.timer_start)
+                task.time_spent += delta.total_seconds() / 3600
+                task.timer_start = fields.Datetime.now()
 
     def write(self, vals):
-        res = super(Task, self).write(vals)
         for task in self:
             if 'stage_id' in vals:
-                stage = self.env['project.task.type'].browse(vals['stage_id'])
-                if stage.name == 'In progress':
-                    task._start()
-                elif stage.name in ['Changes Requested', 'Waiting']:
-                    task._pause()
-                elif stage.name in ['Cancelled', 'Done']:
-                    task._stop()
-        return res
+                new_stage = self.env['project.task.type'].browse(vals['stage_id'])
+                new_state = new_stage.name if new_stage else False
+                if new_state:
+                    if new_state == 'In Progress':
+                        task._start_timer()
+                    elif new_state in ['Changes Requested', 'Waiting', 'Cancelled', 'Done']:
+                        task._stop_timer()
+        return super(Task, self).write(vals)
+
 
 class MailActivityType(models.Model):
     _inherit = "mail.activity.type"
