@@ -16,7 +16,7 @@
 
     <menuitem
         id="menu_todo_todos"
-        name="To-Do :)"
+        name="To-Do"
         parent="menu_hr_attendance_root"
         sequence="20"
         action="company_connect.project_task_preload_action_todo">
