@@ -11,6 +11,9 @@
 
     <menuitem id="menu_hr_attendance_view_attendances" name="Overview" parent="menu_hr_attendance_root" sequence="5" groups="company_connect.group_company_connect_hr_attendance_officer" action="company_connect.hr_attendance_action"/>
 
+    <menuitem id="menu_hr_attendance_settings" name="Configuration" parent="menu_hr_attendance_root"
+        sequence="99" action="company_connect.action_hr_attendance_settings" groups="company_connect.group_company_connect_hr_attendance_manager"/>
+
     <menuitem
         id="menu_todo_todos"
         name="To-Do :)"
