@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record model="ir.module.category" id="base.module_category_human_resources_attendances">
-        <field name="sequence">14</field>
+        <field name="name">CompanyConnect</field>
+        <field name="sequence">10</field>
+        <field name="description">Permissions for Company Connect Attendance</field>
     </record>
 
     <record id="group_company_connect_hr_attendance_own_reader" model="res.groups">
         <field name="name">Company Connect User: Read his own attendances</field>
-        <field name="category_id" ref="base.module_category_hidden"/>
+        <field name="category_id" ref="base.module_category_human_resources_attendances"/>
         <field name="comment">The user will have access to his own attendances on his user / employee profile</field>
     </record>
 
@@ -16,7 +18,7 @@
 
     <record id="group_company_connect_hr_attendance_officer" model="res.groups">
         <field name="name">Company Connect Officer: Manage attendances</field>
-        <field name="category_id" ref="base.module_category_hidden"/>
+        <field name="category_id" ref="base.module_category_human_resources_attendances"/>
         <field name="comment">The user will have access to the attendance records and reporting of employees where he's set as an attendance manager</field>
     </record>
 
